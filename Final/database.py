@@ -1,5 +1,4 @@
 from pymongo import MongoClient
-from bson.objectid import ObjectId
 
 class Database():
     def __init__(self, serverIP= "localhost", port= 27017):
@@ -33,6 +32,7 @@ class Database():
         databaseNames = self.client.list_database_names()
 
         self.hasDatabase = databaseName in databaseNames
+        self.hasCollection = False
 
         # Verifica se o banco de dados existe
         if not self.hasDatabase:
@@ -43,6 +43,11 @@ class Database():
         print(f"[Database] Banco de dados '{databaseName}' configurada com sucesso.")
 
     def setCollection(self, collectionName = "Multimetros"):
+
+        if not self.hasDatabase:
+            print("[Database] Não foi possível setar a coleção - Database não conectada")
+            return
+
         collectionNames = self.database.list_collection_names()
 
         self.hasCollection = collectionName in collectionNames
@@ -82,19 +87,19 @@ class Database():
 if __name__ == "__main__":
     database = Database()
 
-    #items = database.getAllItems()
+    items = database.getAllItems()
 
-    #for item in items:
-    #    print(item)
+    for item in items:
+        print(item)
 
-    item = database.getItemByID()
+    #item = database.getItemByID()
     
-    print("-----------")
-    print(item)
+    #print("-----------")
+    #print(item)
 
-    database.updateItemByID(updateList={"status": "Manutenção"})
+    #database.updateItemByID(updateList={"status": "Disponível"})
 
-    item = database.getItemByID()
+    #item = database.getItemByID()
     
-    print("-----------")
-    print(item)
+    #print("-----------")
+    #print(item)
