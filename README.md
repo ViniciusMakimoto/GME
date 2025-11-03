@@ -97,3 +97,6 @@ Este projeto está sob a licença [MIT]. Veja o arquivo `LICENSE` para mais deta
 <p align="center">
   Feito com ❤️ por Vinícius Makimoto de Freitas
 </p>
+<p align="center">
+  Feito com ❤️ por Carlos Eduardo Gatto
+</p>
