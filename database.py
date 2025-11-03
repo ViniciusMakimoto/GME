@@ -7,8 +7,6 @@ class Database():
         self.hasCollection = False
 
         self.openClient(serverIP, port)
-        self.setDatabase()
-        self.setCollection()
 
     def openClient(self, serverIP, port):
 
@@ -27,7 +25,7 @@ class Database():
         self.opened = False
         print("[Database] Conexão com MongoDB foi fechada")
 
-    def setDatabase(self, databaseName = "Lab66"):
+    def setDatabase(self, databaseName = "GEMA"):
         # Obtem todos os bancos de dados disponíveis
         databaseNames = self.client.list_database_names()
 
