@@ -38,11 +38,13 @@ class AbaEquipamentos:
 
         self.pesquisaEntry = tk.Entry(self.filtroFrame)
         self.pesquisaEntry.pack(side="left", padx=10, pady=10)
+        
+        self.pesquisaEntry.bind('<Return>', self.onAplicarFiltro)
 
         self.aplicarFiltroButton = tk.Button(self.filtroFrame, text="Aplicar Filtro", command=self.onAplicarFiltro)
         self.aplicarFiltroButton.pack(side="left", padx=10, pady=10)
 
-    def onAplicarFiltro(self):
+    def onAplicarFiltro(self, event=None):
         todosEquipamentos = self.equipamentosService.obterTodosEquipamentos()
         statusSelecionado = self.statusComboBox.get()
         pesquisaTexto = self.pesquisaEntry.get().strip()
