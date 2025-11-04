@@ -2,8 +2,14 @@
 import tkinter as tk
 from tkinter import ttk
 
+from services.manutencoesService import ManutencoesService
+
 MAIN_BACKGROUND_COLOR = "#252F60"
 LATERAL_MENU_COLOR = "#353F6E"
+
+STATUS_OPTIONS = ["Pendente", "Concluído", "Cancelado"]
+PRIORIDADE_OPTIONS = ["Baixa", "Média", "Alta"]
+TIPO_OPTIONS = ["Preventiva", "Corretiva"]
 
 class AbaManutencoes:
     def __init__(self, areaPrincipal):
@@ -12,28 +18,126 @@ class AbaManutencoes:
         
         self.filtroFrame = tk.Frame(self.mainFrame, height=125, bg=MAIN_BACKGROUND_COLOR)
         self.filtroFrame.pack(side="top", fill="x")
-
+        self.criarFiltros()
+        
         self.tabelaFrame = tk.Frame(self.mainFrame, bg=MAIN_BACKGROUND_COLOR)
         self.tabelaFrame.pack(side="bottom", expand=True, fill="both")
-
+        
         self.criarTabela()
-        self.atualizarTabela([
-            ("Dado 1", "Dado 2", "Dado 3"),
-            ("Dado A", "Dado B", "Dado C"),
-            ("Info 1", "Info 2", "Info 3")])
+
+        self.manutencoesService = ManutencoesService()
+        self.atualizarTabela(self.manutencoesService.obterTodasManutencoes())
+
+    def criarFiltros(self):
+
+        self.statusLabel = tk.Label(self.filtroFrame, text="Status:",  height=7, bg=MAIN_BACKGROUND_COLOR, fg="white")
+        self.statusLabel.pack(side="left", padx=10, pady=10)
+
+        statusValues = STATUS_OPTIONS.copy()
+        statusValues.insert(0, 'Todos')
+
+        self.statusComboBox = ttk.Combobox(self.filtroFrame, state= "readonly", values=statusValues)
+        self.statusComboBox.current(0)
+        self.statusComboBox.pack(side="left", padx=10, pady=10)
+
+        self.prioridadeLabel = tk.Label(self.filtroFrame, text="Prioridade:",  height=7, bg=MAIN_BACKGROUND_COLOR, fg="white")
+        self.prioridadeLabel.pack(side="left", padx=10, pady=10)
+
+        prioridadeValues = PRIORIDADE_OPTIONS.copy()
+        prioridadeValues.insert(0, 'Todas')
+
+        self.prioridadeComboBox = ttk.Combobox(self.filtroFrame, state= "readonly", values=prioridadeValues)
+        self.prioridadeComboBox.current(0)
+        self.prioridadeComboBox.pack(side="left", padx=10, pady=10)
+
+        self.tipoLabel = tk.Label(self.filtroFrame, text="Tipo:",  height=7, bg=MAIN_BACKGROUND_COLOR, fg="white")
+        self.tipoLabel.pack(side="left", padx=10, pady=10)
+
+        tipoValues = TIPO_OPTIONS.copy()
+        tipoValues.insert(0, 'Todos')
+
+        self.tipoComboBox = ttk.Combobox(self.filtroFrame, state= "readonly", values=tipoValues)
+        self.tipoComboBox.current(0)
+        self.tipoComboBox.pack(side="left", padx=10, pady=10)
+
+        self.pesquisaLabel = tk.Label(self.filtroFrame, text="Pesquisar (id):", bg=MAIN_BACKGROUND_COLOR, fg="white")
+        self.pesquisaLabel.pack(side="left", padx=10, pady=10)
+
+        self.pesquisaEntry = tk.Entry(self.filtroFrame)
+        self.pesquisaEntry.pack(side="left", padx=10, pady=10)
+        
+        self.pesquisaEntry.bind('<Return>', self.onAplicarFiltro)
+
+        self.aplicarFiltroButton = tk.Button(self.filtroFrame, text="Aplicar Filtro", command=self.onAplicarFiltro)
+        self.aplicarFiltroButton.pack(side="left", padx=10, pady=10)
+
+    def onAplicarFiltro(self, event=None):
+        todosEquipamentos = self.manutencoesService.obterTodasManutencoes()
+        statusSelecionado = self.statusComboBox.get()
+        prioridadeSelecionada = self.prioridadeComboBox.get()
+        tipoSelecionado = self.tipoComboBox.get()
+        pesquisaTexto = self.pesquisaEntry.get().strip()
+
+        if statusSelecionado == "Todos":
+            filtroStatus = todosEquipamentos
+        else:
+            filtroStatus = [equip for equip in todosEquipamentos if equip[5].lower() == statusSelecionado.lower()]
+
+        if prioridadeSelecionada != "Todas":
+            filtroStatus = [equip for equip in filtroStatus if equip[2].lower() == prioridadeSelecionada.lower()]
+
+        if tipoSelecionado != "Todos":
+            filtroStatus = [equip for equip in filtroStatus if equip[3].lower() == tipoSelecionado.lower()]
+        
+        self.atualizarTabela(filtroStatus)
     
+    def abrirComFiltroPorId(self, equip_id):
+        """
+        Abre a aba de manutenções já filtrada pelo ID do equipamento.
+        Usa o campo 'ID Equipamento' (coluna índice 1) para o filtro.
+        """
+        todos = self.manutencoesService.obterTodasManutencoes()
+        if not todos:
+            self.atualizarTabela([])
+            return
+        
+        self.statusComboBox.current(0)
+        self.prioridadeComboBox.current(0)
+        self.tipoComboBox.current(0)
+
+        filtro = [m for m in todos if str(m[1]) == str(equip_id)]
+        # atualiza campo de pesquisa visível
+        self.pesquisaEntry.delete(0, tk.END)
+        self.pesquisaEntry.insert(0, str(equip_id))
+        # mostra resultados filtrados
+        self.atualizarTabela(filtro)
+
     def criarTabela(self):
-        # Exemplo de criação de tabela usando Treeview
-        self.tabela = ttk.Treeview(self.tabelaFrame, columns=("col1", "col2", "col3"), show="headings")
-        self.tabela.heading("col1", text="Coluna 1")
-        self.tabela.heading("col2", text="Coluna 2")
-        self.tabela.heading("col3", text="Coluna 3")
+        columns = ("col1", "col2", "col3", "col4", "col5", "col6")
+
+        self.tabela = ttk.Treeview(self.tabelaFrame, columns= columns, show="headings")
+        self.tabela.heading("col1", text="ID")
+        self.tabela.heading("col2", text="ID Equipamento")
+        self.tabela.heading("col3", text="Prioridade")
+        self.tabela.heading("col4", text="Tipo")
+        self.tabela.heading("col5", text="Descrição do Problema")
+        self.tabela.heading("col6", text="Status")
         self.tabela.pack(expand=True, fill='both')
 
+        for col in columns:
+            self.tabela.column(col, anchor=tk.CENTER)
+
+        #self.tabela.bind('<Double-1>', self.on_double_click)
+
     def atualizarTabela(self, dados):
+
         # Limpa a tabela existente
         for item in self.tabela.get_children():
             self.tabela.delete(item)
+
+        # Substitui valores None ou "" por "-"
+        dados = [[valor if valor not in (None, "") else "-" for valor in linha] for linha in dados]
+
         # Adiciona novos dados à tabela
         for linha in dados:
             self.tabela.insert("", tk.END, values=linha)

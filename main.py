@@ -28,7 +28,7 @@ class mainApp:
         self.areaPrincipal = tk.Frame(self.root, bg=MAIN_BACKGROUND_COLOR)
         self.areaPrincipal.pack(side="right", expand=True, fill="both")
 
-        self.AbaEquipamentos = AbaEquipamentos(self.areaPrincipal)
+        self.AbaEquipamentos = AbaEquipamentos(self.areaPrincipal, abrir_manutencoes_callback=self.abrirManutencoesComFiltro)
         self.AbaManutencoes = AbaManutencoes(self.areaPrincipal)
 
         self.onOpenEquipamentos()
@@ -46,6 +46,10 @@ class mainApp:
         
         self.AbaManutencoes.mainFrame.pack(expand=True, fill="both")
         self.AbaEquipamentos.mainFrame.pack_forget()
+
+    def abrirManutencoesComFiltro(self, equip_id):
+        self.AbaManutencoes.abrirComFiltroPorId(equip_id)
+        self.onOpenManutencoes()
 
 if __name__ == "__main__":
     root = tk.Tk()

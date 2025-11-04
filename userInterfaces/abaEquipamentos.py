@@ -8,7 +8,7 @@ MAIN_BACKGROUND_COLOR = "#252F60"
 LATERAL_MENU_COLOR = "#353F6E"
 
 class AbaEquipamentos:
-    def __init__(self, areaPrincipal):
+    def __init__(self, areaPrincipal, abrir_manutencoes_callback=None):
 
         self.mainFrame = tk.Frame(areaPrincipal, bg=MAIN_BACKGROUND_COLOR)
         
@@ -23,6 +23,8 @@ class AbaEquipamentos:
 
         self.equipamentosService = EquipamentosService()
         self.atualizarTabela(self.equipamentosService.obterTodosEquipamentos())
+        # callback para abrir a aba de manutenções com filtro por id
+        self.abrir_manutencoes_callback = abrir_manutencoes_callback
 
     def criarFiltros(self):
 
@@ -90,6 +92,12 @@ class AbaEquipamentos:
             # Faça o que precisar com o item_id aqui, como obter os valores
             values = self.tabela.item(item_id, 'values')
             print(f"Valores do item: {values}")
+            # obtém os valores da linha (o primeiro valor é o ID do equipamento)
+            values = self.tabela.item(item_id, 'values')
+            equipamento_id = values[0] if values else None
+            # Se houver callback, abre a aba de manutenções e aplica o filtro por id
+            if equipamento_id and self.abrir_manutencoes_callback:
+                self.abrir_manutencoes_callback(equipamento_id)
 
     def criarTabela(self):
         columns = ("col1", "col2", "col3", "col4", "col5", "col6", "col7")
