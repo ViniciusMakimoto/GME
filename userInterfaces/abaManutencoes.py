@@ -77,7 +77,7 @@ class AbaManutencoes:
         self.aplicarFiltroButton = tk.Button(self.filtroFrame, text="Aplicar Filtro", command=self.onAplicarFiltro)
         self.aplicarFiltroButton.pack(side="left", padx=10, pady=10)
 
-        self.botCriarManutencao = tk.Button(self.filtroFrame, text="Criar Manutenção", command=self.onCriarManutencao)
+        self.botCriarManutencao = tk.Button(self.filtroFrame, text="Nova Manutenção", command=self.onCriarManutencao)
         self.botCriarManutencao.pack(side="right", padx=10, pady=10)
     
     def onCriarManutencao(self):

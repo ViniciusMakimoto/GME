@@ -28,9 +28,9 @@ class mainApp:
 
         # Frame para centralizar os botões
         self.botoes_frame = tk.Frame(self.menuLateral, bg=LATERAL_MENU_COLOR)
-        self.botoes_frame.grid(row=1, column=0, pady=10, padx=30, sticky="nsew")
+        self.botoes_frame.grid(row=1, rowspan=3, column=0, pady=10, padx=30, sticky="nsew")
 
-        self.menuLateral.grid_rowconfigure(1, weight=1)  # Faz os botões ficarem centralizados verticalmente
+        self.menuLateral.grid_rowconfigure((0, 1, 2, 3, 4), weight=1)  
         self.menuLateral.grid_columnconfigure(0, weight=1)
 
         self.botaoEquipamentos = tk.Button(self.botoes_frame, text="Equipamentos", command=self.onOpenEquipamentos, height=2)
@@ -48,7 +48,7 @@ class mainApp:
         # Imagem no final do menu lateral
         self.final_img = tk.PhotoImage(file=os.path.abspath("Images/LogoCEFSA.png"))
         self.final_label = tk.Label(self.menuLateral, image=self.final_img, bg=LATERAL_MENU_COLOR)
-        self.final_label.grid(row=2, column=0, pady=(10, 30), padx=10, sticky="s")
+        self.final_label.grid(row=4, column=0, pady=(10, 30), padx=10, sticky="s")
 
         self.AbaEquipamentos = AbaEquipamentos(self.areaPrincipal, abrir_manutencoes_callback=self.abrirManutencoesComFiltro)
         self.AbaManutencoes = AbaManutencoes(self.areaPrincipal, nova_manutencao_callback=self.onOpenNovaManutencao)
