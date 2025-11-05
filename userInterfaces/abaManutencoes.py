@@ -12,7 +12,9 @@ PRIORIDADE_OPTIONS = ["Baixa", "Média", "Alta"]
 TIPO_OPTIONS = ["Preventiva", "Corretiva"]
 
 class AbaManutencoes:
-    def __init__(self, areaPrincipal):
+    def __init__(self, areaPrincipal, nova_manutencao_callback):
+
+        self.nova_manutencao_callback = nova_manutencao_callback
 
         self.mainFrame = tk.Frame(areaPrincipal, bg=MAIN_BACKGROUND_COLOR)
         
@@ -71,6 +73,12 @@ class AbaManutencoes:
         self.aplicarFiltroButton = tk.Button(self.filtroFrame, text="Aplicar Filtro", command=self.onAplicarFiltro)
         self.aplicarFiltroButton.pack(side="left", padx=10, pady=10)
 
+        self.botCriarManutencao = tk.Button(self.filtroFrame, text="Criar Manutenção", command=self.onCriarManutencao)
+        self.botCriarManutencao.pack(side="right", padx=10, pady=10)
+    
+    def onCriarManutencao(self):
+        self.nova_manutencao_callback()
+
     def onAplicarFiltro(self, event=None):
         todosEquipamentos = self.manutencoesService.obterTodasManutencoes()
         statusSelecionado = self.statusComboBox.get()
@@ -79,36 +87,35 @@ class AbaManutencoes:
         pesquisaTexto = self.pesquisaEntry.get().strip()
 
         if statusSelecionado == "Todos":
-            filtroStatus = todosEquipamentos
+            filtro = todosEquipamentos
         else:
-            filtroStatus = [equip for equip in todosEquipamentos if equip[5].lower() == statusSelecionado.lower()]
+            filtro = [equip for equip in todosEquipamentos if equip[5].lower() == statusSelecionado.lower()]
 
         if prioridadeSelecionada != "Todas":
-            filtroStatus = [equip for equip in filtroStatus if equip[2].lower() == prioridadeSelecionada.lower()]
+            filtro = [equip for equip in filtro if equip[2].lower() == prioridadeSelecionada.lower()]
 
         if tipoSelecionado != "Todos":
-            filtroStatus = [equip for equip in filtroStatus if equip[3].lower() == tipoSelecionado.lower()]
+            filtro = [equip for equip in filtro if equip[3].lower() == tipoSelecionado.lower()]
         
-        self.atualizarTabela(filtroStatus)
+        self.atualizarTabela(filtro)
     
     def abrirComFiltroPorId(self, equip_id):
         """
         Abre a aba de manutenções já filtrada pelo ID do equipamento.
-        Usa o campo 'ID Equipamento' (coluna índice 1) para o filtro.
+        Usa o campo 'ID Equipamento'.
         """
-        todos = self.manutencoesService.obterTodasManutencoes()
-        if not todos:
-            self.atualizarTabela([])
-            return
+        self.manutencoesService.obterTodasManutencoes()
         
+        # Reseta filtros
         self.statusComboBox.current(0)
         self.prioridadeComboBox.current(0)
         self.tipoComboBox.current(0)
-
-        filtro = [m for m in todos if str(m[1]) == str(equip_id)]
-        # atualiza campo de pesquisa visível
         self.pesquisaEntry.delete(0, tk.END)
+
+        # atualiza campo de pesquisa
+        filtro = [m for m in todos if str(m[1]) == str(equip_id)]
         self.pesquisaEntry.insert(0, str(equip_id))
+
         # mostra resultados filtrados
         self.atualizarTabela(filtro)
 

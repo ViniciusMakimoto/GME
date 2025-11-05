@@ -4,6 +4,7 @@ from tkinter import ttk
 
 from userInterfaces.abaEquipamentos import AbaEquipamentos
 from userInterfaces.abaManutencoes import AbaManutencoes
+from userInterfaces.abaNovaManutencao import AbaNovaManutencao
 
 MAIN_BACKGROUND_COLOR = "#252F60"
 LATERAL_MENU_COLOR = "#353F6E"
@@ -29,7 +30,8 @@ class mainApp:
         self.areaPrincipal.pack(side="right", expand=True, fill="both")
 
         self.AbaEquipamentos = AbaEquipamentos(self.areaPrincipal, abrir_manutencoes_callback=self.abrirManutencoesComFiltro)
-        self.AbaManutencoes = AbaManutencoes(self.areaPrincipal)
+        self.AbaManutencoes = AbaManutencoes(self.areaPrincipal, nova_manutencao_callback=self.onOpenNovaManutencao)
+        self.AbaNovaManutencao = AbaNovaManutencao(self.areaPrincipal)
 
         self.onOpenEquipamentos()
 
@@ -39,6 +41,7 @@ class mainApp:
         
         self.AbaEquipamentos.mainFrame.pack(expand=True, fill="both")
         self.AbaManutencoes.mainFrame.pack_forget()
+        self.AbaNovaManutencao.mainFrame.pack_forget()
 
     def onOpenManutencoes(self):
         if self.AbaManutencoes.mainFrame.winfo_ismapped():
@@ -46,10 +49,20 @@ class mainApp:
         
         self.AbaManutencoes.mainFrame.pack(expand=True, fill="both")
         self.AbaEquipamentos.mainFrame.pack_forget()
+        self.AbaNovaManutencao.mainFrame.pack_forget()
 
     def abrirManutencoesComFiltro(self, equip_id):
         self.AbaManutencoes.abrirComFiltroPorId(equip_id)
         self.onOpenManutencoes()
+
+    def onOpenNovaManutencao(self):
+        if self.AbaNovaManutencao.mainFrame.winfo_ismapped():
+            return
+        
+        self.AbaNovaManutencao.resetOptions()
+        self.AbaNovaManutencao.mainFrame.pack(expand=True, fill="both")
+        self.AbaManutencoes.mainFrame.pack_forget()
+        self.AbaEquipamentos.mainFrame.pack_forget()
 
 if __name__ == "__main__":
     root = tk.Tk()
