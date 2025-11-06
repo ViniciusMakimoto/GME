@@ -89,13 +89,16 @@ class mainApp:
         self.AbaEquipamentos.mainFrame.pack_forget()
         self.AbaEditarManutecao.mainFrame.pack_forget()
 
-    def onOpenEditarManutencao(self, equip_id):
+    def onOpenEditarManutencao(self, manutecao_id):
         if self.AbaEditarManutecao.mainFrame.winfo_ismapped():
             return
         
-        self.AbaEditarManutecao
+        isValid = self.AbaEditarManutecao.verificarManutencaoValida(manutecao_id)
+        if not isValid:
+            return
 
         self.AbaEditarManutecao.mainFrame.pack(expand=True, fill="both", padx= 50)
+        self.AbaEditarManutecao.popularCampos(manutecao_id)
         self.AbaNovaManutencao.mainFrame.pack_forget()
         self.AbaManutencoes.mainFrame.pack_forget()
         self.AbaEquipamentos.mainFrame.pack_forget()

@@ -6,6 +6,7 @@ from datetime import datetime
 from services.manutencoesService import ManutencoesService
 from services.equipamentosService import EquipamentosService
 from bson import ObjectId
+import re
 
 class AbaNovaManutencao:
     def __init__(self, areaPrincipal, open_manutencoes_callback):
@@ -105,6 +106,13 @@ class AbaNovaManutencao:
                 dados[chave] = widget.get().strip()
             elif isinstance(widget, tk.Text):
                 dados[chave] = widget.get("1.0", tk.END).strip()
+
+        def getID_Equip(id_equip):
+            return id_equip #TODO: FILTRAR MASCARA E OBTER ID VERDADEIRO
+
+        # Aplica a função para extrair o ID sem máscara
+        dados["id_equipamento"] = getID_Equip(dados.get("id_equipamento"))
+
         return dados
     
     def verificarCamposObrigatorios(self, dados):
