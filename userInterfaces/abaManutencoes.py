@@ -118,7 +118,7 @@ class AbaManutencoes:
                     
                 # Verifica se pesquisa é menor ou igual a 3 caracteres e está contido no id  
                 if len(pesquisa) <= 3:
-                    return pesquisaTexto.lower() in str(equip[0]).lower()
+                    return pesquisaTexto.lower() in str(equip[1]).lower()
                 
                 return False
 

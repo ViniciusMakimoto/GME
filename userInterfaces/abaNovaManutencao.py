@@ -1,15 +1,27 @@
 import tkinter as tk
 from tkinter import ttk
 
+from services.novaManutencaoService import NovaManutencaoService
+
 class AbaNovaManutencao:
     def __init__(self, areaPrincipal):
 
         self.mainFrame = tk.Frame(areaPrincipal, bg="#252F60")
         
+        # Ajusta o grid para expandir os campos corretamente
+        self.mainFrame.columnconfigure(0, weight=0)
+        self.mainFrame.columnconfigure(1, weight=1)
+        self.mainFrame.columnconfigure(2, weight=1)
+        self.mainFrame.columnconfigure(3, weight=2)
+
         self.label = tk.Label(self.mainFrame, text="Registar Nova Manutenção", font=("Arial", 20), bg="#252F60", fg="white")
         self.label.grid(row=0, column=0, columnspan=4, pady=20, sticky="ew")
 
-        # ID Equipamento
+        self.initGUI()
+        self.novaManutencaoService = NovaManutencaoService()
+
+    def initGUI(self):
+         # ID Equipamento
         lbl_id = tk.Label(self.mainFrame, text="ID Equipamento", bg="#252F60", fg="white")
         lbl_id.grid(row=1, column=0, sticky="w", padx=20, pady=2)
 
@@ -20,7 +32,7 @@ class AbaNovaManutencao:
         lbl_solicitante = tk.Label(self.mainFrame, text="Solicitante", bg="#252F60", fg="white")
         lbl_solicitante.grid(row=2, column=0, sticky="w", padx=20, pady=2)
 
-        ent_solicitante = tk.Entry(self.mainFrame, width=22)
+        ent_solicitante = ttk.Combobox(self.mainFrame, values=["Ryan", "Pedro"], width=12)
         ent_solicitante.grid(row=2, column=1, sticky="ew", padx=5, pady=2)
 
         # Status (combo menor)
@@ -48,18 +60,12 @@ class AbaNovaManutencao:
         lbl_desc = tk.Label(self.mainFrame, text="Descrição do Problema", bg="#252F60", fg="white")
         lbl_desc.grid(row=6, column=0, sticky="nw", padx=20, pady=2)
 
-        txt_desc = tk.Text(self.mainFrame, height=6, wrap="word")
+        txt_desc = tk.Text(self.mainFrame, height=10, wrap="word")
         txt_desc.grid(row=6, column=1, columnspan=3, sticky="ew", padx=5, pady=2)
 
         # Botão para salvar
         self.btn_salvar = tk.Button(self.mainFrame, text="Salvar Manutenção", bg="#1E90FF", fg="white")
         self.btn_salvar.grid(row=7, column=1, columnspan=3, sticky="ew", padx=5, pady=2)
-
-        # Ajusta o grid para expandir os campos corretamente
-        self.mainFrame.columnconfigure(0, weight=0)
-        self.mainFrame.columnconfigure(1, weight=1)
-        self.mainFrame.columnconfigure(2, weight=0)
-        self.mainFrame.columnconfigure(3, weight=1)
 
         # Armazena referências dos campos para uso posterior
         self.campos = {

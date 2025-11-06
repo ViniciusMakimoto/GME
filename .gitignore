@@ -11,3 +11,4 @@ userInterfaces/__pycache__/abaEquipamentos.cpython-313.pyc
 userInterfaces/__pycache__/abaManutencoes.cpython-313.pyc
 services/__pycache__/manutencoesService.cpython-313.pyc
 userInterfaces/__pycache__/abaNovaManutencao.cpython-313.pyc
+services/__pycache__/novaManutencaoService.cpython-313.pyc

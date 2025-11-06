@@ -81,7 +81,7 @@ class mainApp:
             return
         
         self.AbaNovaManutencao.resetOptions()
-        self.AbaNovaManutencao.mainFrame.pack(expand=True, fill="both", padx= 20)
+        self.AbaNovaManutencao.mainFrame.pack(expand=True, fill="both", padx= 50)
         self.AbaManutencoes.mainFrame.pack_forget()
         self.AbaEquipamentos.mainFrame.pack_forget()
 
