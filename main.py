@@ -5,6 +5,7 @@ from tkinter import ttk
 from userInterfaces.abaEquipamentos import AbaEquipamentos
 from userInterfaces.abaManutencoes import AbaManutencoes
 from userInterfaces.abaNovaManutencao import AbaNovaManutencao
+from userInterfaces.abaEditarManutencao import AbaEditarManutencao
 import os
 
 MAIN_BACKGROUND_COLOR = "#252F60"
@@ -22,7 +23,7 @@ class mainApp:
         self.menuLateral.pack(side="left", fill="y")
 
         # Adiciona uma imagem no menu lateral
-        self.logo_img = tk.PhotoImage(file=os.path.abspath("Images/LogoGEMA.png"))
+        self.logo_img = tk.PhotoImage(file=os.path.abspath("images/LogoGEMA.png"))
         self.logo_label = tk.Label(self.menuLateral, image=self.logo_img, bg=LATERAL_MENU_COLOR)
         self.logo_label.grid(row=0, column=0, pady=(30, 10), padx=10, sticky="n")
 
@@ -46,14 +47,14 @@ class mainApp:
         self.areaPrincipal.pack(side="right", expand=True, fill="both")
 
         # Imagem no final do menu lateral
-        self.final_img = tk.PhotoImage(file=os.path.abspath("Images/LogoCEFSA.png"))
+        self.final_img = tk.PhotoImage(file=os.path.abspath("images/LogoCEFSA.png"))
         self.final_label = tk.Label(self.menuLateral, image=self.final_img, bg=LATERAL_MENU_COLOR)
         self.final_label.grid(row=4, column=0, pady=(10, 30), padx=10, sticky="s")
 
         self.AbaEquipamentos = AbaEquipamentos(self.areaPrincipal, abrir_manutencoes_callback=self.abrirManutencoesComFiltro)
-        self.AbaManutencoes = AbaManutencoes(self.areaPrincipal, nova_manutencao_callback=self.onOpenNovaManutencao)
-        self.AbaNovaManutencao = AbaNovaManutencao(self.areaPrincipal, openManutencoesCallback=self.abrirManutencoesComFiltro)
-
+        self.AbaManutencoes = AbaManutencoes(self.areaPrincipal, nova_manutencao_callback=self.onOpenNovaManutencao, editar_manutencao_callback = self.onOpenEditarManutencao)
+        self.AbaNovaManutencao = AbaNovaManutencao(self.areaPrincipal, open_manutencoes_callback=self.abrirManutencoesComFiltro)
+        self.AbaEditarManutecao = AbaEditarManutencao(self.areaPrincipal, open_manutencoes_callback=self.abrirManutencoesComFiltro)
         self.onOpenEquipamentos()
 
     def onOpenEquipamentos(self):
@@ -63,6 +64,7 @@ class mainApp:
         self.AbaEquipamentos.mainFrame.pack(expand=True, fill="both", padx= 20)
         self.AbaManutencoes.mainFrame.pack_forget()
         self.AbaNovaManutencao.mainFrame.pack_forget()
+        self.AbaEditarManutecao.mainFrame.pack_forget()
 
     def onOpenManutencoes(self):
         if self.AbaManutencoes.mainFrame.winfo_ismapped():
@@ -71,6 +73,7 @@ class mainApp:
         self.AbaManutencoes.mainFrame.pack(expand=True, fill="both", padx= 20)
         self.AbaEquipamentos.mainFrame.pack_forget()
         self.AbaNovaManutencao.mainFrame.pack_forget()
+        self.AbaEditarManutecao.mainFrame.pack_forget()
 
     def abrirManutencoesComFiltro(self, equip_id):
         self.AbaManutencoes.abrirComFiltroPorId(equip_id)
@@ -82,6 +85,18 @@ class mainApp:
         
         self.AbaNovaManutencao.mainFrame.pack(expand=True, fill="both", padx= 50)
         self.AbaNovaManutencao.resetOptions()
+        self.AbaManutencoes.mainFrame.pack_forget()
+        self.AbaEquipamentos.mainFrame.pack_forget()
+        self.AbaEditarManutecao.mainFrame.pack_forget()
+
+    def onOpenEditarManutencao(self, equip_id):
+        if self.AbaEditarManutecao.mainFrame.winfo_ismapped():
+            return
+        
+        self.AbaEditarManutecao
+
+        self.AbaEditarManutecao.mainFrame.pack(expand=True, fill="both", padx= 50)
+        self.AbaNovaManutencao.mainFrame.pack_forget()
         self.AbaManutencoes.mainFrame.pack_forget()
         self.AbaEquipamentos.mainFrame.pack_forget()
 

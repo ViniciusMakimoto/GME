@@ -88,15 +88,21 @@ Contribuições são o que tornam a comunidade de código aberto um lugar incrí
 5.  Abra um **Pull Request**.
 
 ---
-
-## 📝 Licença
-
-Este projeto está sob a licença [MIT]. Veja o arquivo `LICENSE` para mais detalhes.
-
----
 <p align="center">
-  Feito com ❤️ por Vinícius Makimoto de Freitas
+  Feito com ❤️ por:
 </p>
 <p align="center">
-  Feito com ❤️ por Carlos Eduardo Gatto
+  Vinícius Makimoto de Freitas
+</p>
+<p align="center">
+  Carlos Eduardo Gatto
+</p>
+<p align="center">
+  Yago Patrick Gomide Olivera Ortolan
+</p>
+<p align="center">
+  Luiz Felipe Farias Mota
+</p>
+<p align="center">
+  Raphaella Souza de Moraes
 </p>

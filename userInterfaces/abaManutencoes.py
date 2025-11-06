@@ -12,9 +12,10 @@ PRIORIDADE_OPTIONS = ["Baixa", "Média", "Alta"]
 TIPO_OPTIONS = ["Preventiva", "Corretiva"]
 
 class AbaManutencoes:
-    def __init__(self, areaPrincipal, nova_manutencao_callback):
+    def __init__(self, areaPrincipal, nova_manutencao_callback, editar_manutencao_callback):
 
         self.nova_manutencao_callback = nova_manutencao_callback
+        self.editar_manutencao_callback = editar_manutencao_callback
 
         self.mainFrame = tk.Frame(areaPrincipal, bg=MAIN_BACKGROUND_COLOR)
         
@@ -80,6 +81,19 @@ class AbaManutencoes:
         self.botCriarManutencao = tk.Button(self.filtroFrame, text="Nova Manutenção", command=self.onCriarManutencao)
         self.botCriarManutencao.pack(side="right", padx=10, pady=10)
     
+    def on_double_click(self, event):
+        selected_item = self.tabela.selection()
+        if selected_item:
+            # O método selection() retorna uma tupla, pegue o primeiro elemento
+            item_id = selected_item[0]
+            print(f"Item clicado duas vezes: {item_id}")
+            # obtém os valores da linha 
+            values = self.tabela.item(item_id, 'values')
+            manutecao_id = values[0] if values else None
+            # Se houver callback, abre a aba de manutenções e aplica o filtro por id
+            if manutecao_id and self.editar_manutencao_callback:
+                self.editar_manutencao_callback(manutecao_id)
+
     def onCriarManutencao(self):
         self.nova_manutencao_callback()
 
@@ -162,7 +176,7 @@ class AbaManutencoes:
         for col in columns:
             self.tabela.column(col, anchor=tk.CENTER)
 
-        #self.tabela.bind('<Double-1>', self.on_double_click)
+        self.tabela.bind('<Double-1>', self.on_double_click)
 
     def atualizarTabela(self, dados):
 

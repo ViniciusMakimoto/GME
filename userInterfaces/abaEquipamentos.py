@@ -93,9 +93,6 @@ class AbaEquipamentos:
             # O método selection() retorna uma tupla, pegue o primeiro elemento
             item_id = selected_item[0]
             print(f"Item clicado duas vezes: {item_id}")
-            # Faça o que precisar com o item_id aqui, como obter os valores
-            values = self.tabela.item(item_id, 'values')
-            print(f"Valores do item: {values}")
             # obtém os valores da linha (o primeiro valor é o ID do equipamento)
             values = self.tabela.item(item_id, 'values')
             equipamento_id = values[0] if values else None

@@ -1,0 +1,51 @@
+[{
+  "_id": {
+    "$oid": "690493fd2c4db62b31e2b038"
+  },
+  "id_equipamento": 0,
+  "solicitante": "",
+  "responsável": "",
+  "prioridade": "Baixa",
+  "tipo": "Corretiva",
+  "descricao_problema": "",
+  "acao_realizada": "",
+  "data_inicio": null,
+  "data_conclusao": null,
+  "status": "Pendente"
+},
+{
+  "_id": {
+    "$oid": "690c84e62687b9413a54f701"
+  },
+  "id_equipamento": "132",
+  "solicitante": "a",
+  "prioridade": "Baixa",
+  "tipo": "Corretiva",
+  "descricao_problema": "a",
+  "status": "Pendente",
+  "data_inicio": "2025-11-06 08:22:14"
+},
+{
+  "_id": {
+    "$oid": "690c85002687b9413a54f702"
+  },
+  "id_equipamento": "132",
+  "solicitante": "Ryan",
+  "prioridade": "Baixa",
+  "tipo": "Corretiva",
+  "descricao_problema": "Não mede corrente",
+  "status": "Pendente",
+  "data_inicio": "2025-11-06 08:22:40"
+},
+{
+  "_id": {
+    "$oid": "690c8587cebbb1845f54d5c3"
+  },
+  "id_equipamento": "132",
+  "solicitante": "Pedro",
+  "prioridade": "Baixa",
+  "tipo": "Corretiva",
+  "descricao_problema": "Sem Bateria",
+  "status": "Pendente",
+  "data_inicio": "2025-11-06 08:24:55"
+}]

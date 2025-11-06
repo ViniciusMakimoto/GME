@@ -8,7 +8,7 @@ from services.equipamentosService import EquipamentosService
 from bson import ObjectId
 
 class AbaNovaManutencao:
-    def __init__(self, areaPrincipal, openManutencoesCallback):
+    def __init__(self, areaPrincipal, open_manutencoes_callback):
 
         self.mainFrame = tk.Frame(areaPrincipal, bg="#252F60")
         
@@ -24,7 +24,7 @@ class AbaNovaManutencao:
         self.initGUI()
         self.manutencoesService = ManutencoesService()
         self.equipamentoService = EquipamentosService()
-        self.openManutencoesCallback = openManutencoesCallback
+        self.open_manutencoes_callback = open_manutencoes_callback
 
     def initGUI(self):
          # ID Equipamento
@@ -139,5 +139,5 @@ class AbaNovaManutencao:
         if not successo:
             messagebox.showerror("Erro ao Criar Nova Manutenção", "Não foi possível salvar a nova Manutenção no Banco de Dados")
         
-        self.openManutencoesCallback(dados_manutencao.get("id_equipamento"))
+        self.open_manutencoes_callback(dados_manutencao.get("id_equipamento"))
         messagebox.showinfo("Criação de Nova Manutenção", "Nova Manutenção criada com Sucesso!")

@@ -1,107 +1,136 @@
 import tkinter as tk
 from tkinter import ttk
+from tkinter import messagebox
+from datetime import datetime
 
-class AbaNovaManutencao:
-    def __init__(self, areaPrincipal):
+from services.manutencoesService import ManutencoesService
+from services.equipamentosService import EquipamentosService
+from bson import ObjectId
+
+class AbaEditarManutencao:
+    def __init__(self, areaPrincipal, open_manutencoes_callback):
 
         self.mainFrame = tk.Frame(areaPrincipal, bg="#252F60")
         
-        self.label = tk.Label(self.mainFrame, text="Aqui será a interface para criar uma nova manutenção", bg="#252F60", fg="white")
-        self.label.pack(pady=20)
+        # Ajusta o grid para expandir os campos corretamente
+        self.mainFrame.columnconfigure(0, weight=0)
+        self.mainFrame.columnconfigure(1, weight=1)
+        self.mainFrame.columnconfigure(2, weight=1)
+        self.mainFrame.columnconfigure(3, weight=2)
 
-        # Campos do formulário para nova manutenção (criados manualmente para poder ajustar tamanhos)
-        # ID Equipamento
+        self.label = tk.Label(self.mainFrame, text="Registar Nova Manutenção", font=("Arial", 20), bg="#252F60", fg="white")
+        self.label.grid(row=0, column=0, columnspan=4, pady=20, sticky="ew")
+
+        self.initGUI()
+        self.manutencoesService = ManutencoesService()
+        self.equipamentoService = EquipamentosService()
+        self.open_manutencoes_callback = open_manutencoes_callback
+
+    def initGUI(self):
+         # ID Equipamento
         lbl_id = tk.Label(self.mainFrame, text="ID Equipamento", bg="#252F60", fg="white")
-        lbl_id.pack(anchor="w", padx=20)
+        lbl_id.grid(row=1, column=0, sticky="w", padx=20, pady=2)
 
-        ent_id = tk.Entry(self.mainFrame, width=20)
-        ent_id.pack(fill="x", padx=20, pady=2)
-
-        # Coleção Equipamento
-        lbl_colecao = tk.Label(self.mainFrame, text="Coleção Equipamento", bg="#252F60", fg="white")
-        lbl_colecao.pack(anchor="w", padx=20)
-
-        ent_colecao = tk.Entry(self.mainFrame, width=30)
-        ent_colecao.pack(fill="x", padx=20, pady=2)
+        ent_id = tk.Entry(self.mainFrame, width=18, state="disabled")
+        ent_id.grid(row=1, column=1, sticky="ew", padx=5, pady=2)
 
         # Solicitante
         lbl_solicitante = tk.Label(self.mainFrame, text="Solicitante", bg="#252F60", fg="white")
-        lbl_solicitante.pack(anchor="w", padx=20)
+        lbl_solicitante.grid(row=2, column=0, sticky="w", padx=20, pady=2)
 
-        ent_solicitante = tk.Entry(self.mainFrame, width=30)
-        ent_solicitante.pack(fill="x", padx=20, pady=2)
+        ent_solicitante = ttk.Combobox(self.mainFrame, values=["Ryan", "Pedro"], width=12)
+        ent_solicitante.grid(row=2, column=1, sticky="ew", padx=5, pady=2)
 
-        # Responsável
-        lbl_responsavel = tk.Label(self.mainFrame, text="Responsável", bg="#252F60", fg="white")
-        lbl_responsavel.pack(anchor="w", padx=20)
+        # Status (combo menor)
+        lbl_status = tk.Label(self.mainFrame, text="Status", bg="#252F60", fg="white")
+        lbl_status.grid(row=3, column=0, sticky="w", padx=20, pady=2)
 
-        ent_responsavel = tk.Entry(self.mainFrame, width=30)
-        ent_responsavel.pack(fill="x", padx=20, pady=2)
+        cb_status = ttk.Combobox(self.mainFrame, values=["Pendente", "Em andamento", "Concluída"], state="readonly", width=12)
+        cb_status.grid(row=3, column=1, sticky="ew", padx=5, pady=2)
 
-        # Prioridade
+        # Prioridade (combo menor)
         lbl_prioridade = tk.Label(self.mainFrame, text="Prioridade", bg="#252F60", fg="white")
-        lbl_prioridade.pack(anchor="w", padx=20)
+        lbl_prioridade.grid(row=4, column=0, sticky="w", padx=20, pady=2)
 
-        cb_prioridade = ttk.Combobox(self.mainFrame, values=["Baixa", "Média", "Alta"], state="readonly", width=20)
-        cb_prioridade.pack(fill="x", padx=20, pady=2)
+        cb_prioridade = ttk.Combobox(self.mainFrame, values=["Baixa", "Média", "Alta"], state="readonly", width=12)
+        cb_prioridade.grid(row=4, column=1, sticky="ew", padx=5, pady=2)
 
-        # Tipo
+        # Tipo (combo menor)
         lbl_tipo = tk.Label(self.mainFrame, text="Tipo", bg="#252F60", fg="white")
-        lbl_tipo.pack(anchor="w", padx=20)
+        lbl_tipo.grid(row=5, column=0, sticky="w", padx=20, pady=2)
 
-        cb_tipo = ttk.Combobox(self.mainFrame, values=["Corretiva", "Preventiva"], state="readonly", width=20)
-        cb_tipo.pack(fill="x", padx=20, pady=2)
+        cb_tipo = ttk.Combobox(self.mainFrame, values=["Corretiva", "Preventiva"], state="readonly", width=12)
+        cb_tipo.grid(row=5, column=1, sticky="ew", padx=5, pady=2)
 
         # Descrição do Problema (campo maior — multi-linha)
         lbl_desc = tk.Label(self.mainFrame, text="Descrição do Problema", bg="#252F60", fg="white")
-        lbl_desc.pack(anchor="w", padx=20)
+        lbl_desc.grid(row=6, column=0, sticky="nw", padx=20, pady=2)
 
-        txt_desc = tk.Text(self.mainFrame, height=6, wrap="word")
-        txt_desc.pack(fill="x", padx=20, pady=2)
+        txt_desc = tk.Text(self.mainFrame, height=10, wrap="word")
+        txt_desc.grid(row=6, column=1, columnspan=3, sticky="ew", padx=5, pady=2)
 
-        # Ação Realizada (pode ser multi-linha também)
-        lbl_acao = tk.Label(self.mainFrame, text="Ação Realizada", bg="#252F60", fg="white")
-        lbl_acao.pack(anchor="w", padx=20)
-
-        txt_acao = tk.Text(self.mainFrame, height=4, wrap="word")
-        txt_acao.pack(fill="x", padx=20, pady=2)
-
-        # Data Início
-        lbl_data_inicio = tk.Label(self.mainFrame, text="Data Início", bg="#252F60", fg="white")
-        lbl_data_inicio.pack(anchor="w", padx=20)
-
-        ent_data_inicio = tk.Entry(self.mainFrame, width=20)
-        ent_data_inicio.pack(fill="x", padx=20, pady=2)
-
-        # Data Conclusão
-        lbl_data_fim = tk.Label(self.mainFrame, text="Data Conclusão", bg="#252F60", fg="white")
-        lbl_data_fim.pack(anchor="w", padx=20)
-
-        ent_data_fim = tk.Entry(self.mainFrame, width=20)
-        ent_data_fim.pack(fill="x", padx=20, pady=2)
-
-        # Status
-        lbl_status = tk.Label(self.mainFrame, text="Status", bg="#252F60", fg="white")
-        lbl_status.pack(anchor="w", padx=20)
-        
-        cb_status = ttk.Combobox(self.mainFrame, values=["Pendente", "Em andamento", "Concluída"], state="readonly", width=20)
-        cb_status.pack(fill="x", padx=20, pady=2)
+        # Botão para salvar
+        self.btn_salvar = tk.Button(self.mainFrame, text="Salvar Alterações", bg="#1E90FF", fg="white", command=self.salvarManutencao)
+        self.btn_salvar.grid(row=7, column=1, columnspan=3, sticky="ew", padx=5, pady=2)
 
         # Armazena referências dos campos para uso posterior
         self.campos = {
-            "ID Equipamento": ent_id,
-            "Coleção Equipamento": ent_colecao,
-            "Solicitante": ent_solicitante,
-            "Responsável": ent_responsavel,
-            "Prioridade": cb_prioridade,
-            "Tipo": cb_tipo,
-            "Descrição do Problema": txt_desc,
-            "Ação Realizada": txt_acao,
-            "Data Início": ent_data_inicio,
-            "Data Conclusão": ent_data_fim,
-            "Status": cb_status
+            "id_equipamento": ent_id,
+            "solicitante": ent_solicitante,
+            "prioridade": cb_prioridade,
+            "tipo": cb_tipo,
+            "descricao_problema": txt_desc,
+            "status": cb_status
         }
 
-        # Botão para salvar
-        self.btn_salvar = tk.Button(self.mainFrame, text="Salvar Manutenção", bg="#1E90FF", fg="white")
-        self.btn_salvar.pack(pady=20)
+    def verificarManutencaoValida(self, manutecao_id):
+        manutencaoInfo = self.manutencoesService.obterManutencaoPorID(manutecao_id)
+        if manutencaoInfo == None:
+            messagebox.showwarning("Erro ao Editar Manutenção", "Manutenção Inválida")
+            return False
+
+    def obterDadosFormulario(self):
+        dados = {}
+        for chave, widget in self.campos.items():
+            if isinstance(widget, ttk.Combobox):
+                dados[chave] = widget.get().strip()
+            elif isinstance(widget, tk.Entry):
+                dados[chave] = widget.get().strip()
+            elif isinstance(widget, tk.Text):
+                dados[chave] = widget.get("1.0", tk.END).strip()
+        return dados
+    
+    def verificarCamposObrigatorios(self, dados):
+        campos_obrigatorios = ["id_equipamento", "solicitante", "descricao_problema"]
+        for campo in campos_obrigatorios:
+            if not dados.get(campo):
+                return False, f"Campo {campo} não pode ser vazio!"
+            
+        ID_Equipamento = int(dados.get("id_equipamento"))
+            
+        equipamentoInfo = self.equipamentoService.obterEquipamentoPorID(ID_Equipamento)
+        if equipamentoInfo == None:
+            return False, "ID do Equipamento inválido!"
+
+        return True, ""
+    
+    def salvarManutencao(self):
+        dados_manutencao = self.obterDadosFormulario()
+
+        result, message = self.verificarCamposObrigatorios(dados_manutencao)
+        if not result:
+            messagebox.showwarning("Falha ao Criar Nova Manutenção", message=message)
+            return
+
+        # Obter id unico da manutenção
+        dados_manutencao["_id"] = ObjectId()
+        
+        # obter data e hora atuais
+        dados_manutencao["data_inicio"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+        successo = self.manutencoesService.criarNovaManutencao(dados_manutencao)
+        if not successo:
+            messagebox.showerror("Erro ao Criar Nova Manutenção", "Não foi possível salvar a nova Manutenção no Banco de Dados")
+        
+        self.open_manutencoes_callback(dados_manutencao.get("id_equipamento"))
+        messagebox.showinfo("Criação de Nova Manutenção", "Nova Manutenção criada com Sucesso!")
