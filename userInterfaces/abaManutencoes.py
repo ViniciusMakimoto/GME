@@ -7,7 +7,7 @@ from services.manutencoesService import ManutencoesService
 MAIN_BACKGROUND_COLOR = "#252F60"
 LATERAL_MENU_COLOR = "#353F6E"
 
-STATUS_OPTIONS = ["Pendente", "Concluído", "Cancelado"]
+STATUS_OPTIONS = ["Pendente", "Em Andamento", "Concluído", "Cancelado"]
 PRIORIDADE_OPTIONS = ["Baixa", "Média", "Alta"]
 TIPO_OPTIONS = ["Preventiva", "Corretiva"]
 
