@@ -12,8 +12,9 @@ PRIORIDADE_OPTIONS = ["Baixa", "Média", "Alta"]
 TIPO_OPTIONS = ["Preventiva", "Corretiva"]
 
 class AbaManutencoes:
+    # definição do construtor da classe
     def __init__(self, areaPrincipal, nova_manutencao_callback, editar_manutencao_callback):
-
+        # Armazena os callbacks para criar nova manutenção e editar manutenção
         self.nova_manutencao_callback = nova_manutencao_callback
         self.editar_manutencao_callback = editar_manutencao_callback
 
@@ -24,25 +25,25 @@ class AbaManutencoes:
         
         self.label = tk.Label(self.filtroFrame, text="Manutenções", font=("Arial", 20), bg="#252F60", fg="white")
         self.label.pack(side="top", fill="x", pady=(20, 0))
-
+        # Chama o método responsável por criar os campos de filtro da tela
         self.criarFiltros()
         
         self.tabelaFrame = tk.Frame(self.mainFrame, bg=MAIN_BACKGROUND_COLOR)
         self.tabelaFrame.pack(side="bottom", expand=True, fill="both")
-        
+        # chamada do método que cria a tabela de manutenções
         self.criarTabela()
-
+        # Instancia o serviço de manutenções e carrega os dados iniciais na tabela
         self.manutencoesService = ManutencoesService()
         self.atualizarTabela(self.manutencoesService.obterTodasManutencoes())
-
+    # função que cria os campos de filtro da tela de manutenções
     def criarFiltros(self):
 
         self.statusLabel = tk.Label(self.filtroFrame, text="Status:",  height=7, bg=MAIN_BACKGROUND_COLOR, fg="white")
         self.statusLabel.pack(side="left", padx=10, pady=10)
-
-        statusValues = STATUS_OPTIONS.copy()
+        # Cria a lista de opções para o combobox de status, incluindo a opção 'Todos' no início
+        statusValues = STATUS_OPTIONS.copy()        # O método .copy() faz uma cópia para não alterar a lista original
         statusValues.insert(0, 'Todos')
-
+        #
         self.statusComboBox = ttk.Combobox(self.filtroFrame, state= "readonly", values=statusValues)
         self.statusComboBox.current(0)
         self.statusComboBox.pack(side="left", padx=10, pady=10)
@@ -53,7 +54,7 @@ class AbaManutencoes:
         prioridadeValues = PRIORIDADE_OPTIONS.copy()
         prioridadeValues.insert(0, 'Todas')
 
-        self.prioridadeComboBox = ttk.Combobox(self.filtroFrame, state= "readonly", values=prioridadeValues)
+        self.prioridadeComboBox = ttk.Combobox(self.filtroFrame, state= "readonly", values=prioridadeValues) #Readonly impede digitação manual, apenas seleção
         self.prioridadeComboBox.current(0)
         self.prioridadeComboBox.pack(side="left", padx=10, pady=10)
 
@@ -96,7 +97,7 @@ class AbaManutencoes:
 
     def onCriarManutencao(self):
         self.nova_manutencao_callback()
-
+    # Aplica os filtros selecionados na tela de manutenções
     def onAplicarFiltro(self, event=None):
         todosEquipamentos = self.manutencoesService.obterTodasManutencoes()
         statusSelecionado = self.statusComboBox.get()
@@ -110,6 +111,7 @@ class AbaManutencoes:
             filtro = [equip for equip in todosEquipamentos if equip[5].lower() == statusSelecionado.lower()]
 
         if prioridadeSelecionada != "Todas":
+            #Crie uma nova lista com todos os itens equip de filtro onde o valor na posição 2 (prioridade) for igual à prioridade selecionada no filtro da tela
             filtro = [equip for equip in filtro if equip[2].lower() == prioridadeSelecionada.lower()]
 
         if tipoSelecionado != "Todos":
@@ -135,7 +137,7 @@ class AbaManutencoes:
                     return pesquisaTexto.lower() in str(equip[1]).lower()
                 
                 return False
-
+            #cria uma nova lista com todos os itens equip de filtro onde o id corresponde ao texto pesquisado
             filtro = [equip for equip in filtro if id_match(equip, pesquisaTexto)]
 
         

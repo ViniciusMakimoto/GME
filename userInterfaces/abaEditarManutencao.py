@@ -23,10 +23,10 @@ class AbaEditarManutencao:
         self.label = tk.Label(self.mainFrame, text="Editar Nova Manutenção", font=("Arial", 20), bg="#252F60", fg="white")
         self.label.grid(row=0, column=0, columnspan=4, pady=20, sticky="ew")
 
-        self.initGUI()
-        self.manutencoesService = ManutencoesService()
-        self.equipamentoService = EquipamentosService()
-        self.open_manutencoes_callback = open_manutencoes_callback
+        self.initGUI() #Inicializa os componentes da GUI
+        self.manutencoesService = ManutencoesService() #instancia o serviço de manutenções
+        self.equipamentoService = EquipamentosService() #instancia o serviço de equipamentos
+        self.open_manutencoes_callback = open_manutencoes_callback #Callback para abrir a aba de manutenções
 
     def initGUI(self):
         # ID Manutenção
@@ -108,7 +108,7 @@ class AbaEditarManutencao:
             "acao_realizada": txt_acao,
             "status": cb_status
         }
-
+    #verifica se a manutenção com o ID fornecido é válida
     def verificarManutencaoValida(self, manutecao_id):
         manutencaoInfo = self.manutencoesService.obterManutencaoPorID(ObjectId(manutecao_id))
         if manutencaoInfo == None:
@@ -116,10 +116,10 @@ class AbaEditarManutencao:
             return False
 
         return True
-        
+    #obtém os dados atuais da manutenção a partir do serviço de manutenções  
     def obterDadosAtuais(self, manutecao_id):
         return self.manutencoesService.obterManutencaoPorID(ObjectId(manutecao_id))
-    
+    #popula os campos do formulário com os dados da manutenção
     def popularCampos(self, manutecao_id):
         dados = self.obterDadosAtuais(manutecao_id)
 
@@ -140,7 +140,7 @@ class AbaEditarManutencao:
             elif isinstance(widget, tk.Text):
                 widget.delete("1.0", tk.END)
                 widget.insert(tk.END, str(valor))
-
+    
     def obterDadosFormulario(self):
         dados = {}
         for chave, widget in self.campos.items():
@@ -154,8 +154,8 @@ class AbaEditarManutencao:
     
     def verificarCamposObrigatorios(self, dados):
         campos_obrigatorios = ["id_equipamento", "solicitante", "descricao_problema"]
-        for campo in campos_obrigatorios:
-            if not dados.get(campo):
+        for campo in campos_obrigatorios: 
+            if not dados.get(campo): #verifica se o campo está vazio
                 return False, f"Campo {campo} não pode ser vazio!"
             
         ID_Equipamento = int(dados.get("id_equipamento"))

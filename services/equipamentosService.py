@@ -16,9 +16,10 @@ from database import Database
 class EquipamentosService:
     def __init__(self):
         self.database = Database()
-        self.database.setDatabase("GEMA")
-        self.database.setCollection("Equipamentos")
+        self.database.setDatabase("GEMA") #Define o banco de dados como GEMA
+        self.database.setCollection("Equipamentos") #Define a coleção como Equipamentos
 
+    #Busca todos os equipamentos no banco de dados e retorna uma lista de tuplas com as informações relevantes
     def obterTodosEquipamentos(self):
 
         equipamentos = []
@@ -27,16 +28,16 @@ class EquipamentosService:
             equipamentos.append((equipamento["_id"], equipamento["descr"], equipamento["serialNum"], equipamento["marca"], equipamento["modelo"], equipamento["observacoes"], equipamento["status"]))
 
         return equipamentos
-
+    # Obtém um equipamento pelo seu ID e retorna um dicionário com suas informações
     def obterEquipamentoPorID(self, id):
         return self.database.getItemByID(id)
-
+    # Atualiza as informações de um equipamento pelo seu ID 
     def atualizarEquipamentoPorID(self, id, atualizacoes):
         return self.database.updateItemByID(id, atualizacoes)
     
 
 if __name__ == "__main__":
-    service = EquipamentosService()
-    equipamentos = service.obterTodosEquipamentos()
+    service = EquipamentosService() #
+    equipamentos = service.obterTodosEquipamentos()#obtém todos os equipamentos do banco de dados
     for equipamento in equipamentos:
         print(equipamento)

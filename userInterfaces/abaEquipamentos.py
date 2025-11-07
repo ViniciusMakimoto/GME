@@ -8,8 +8,9 @@ MAIN_BACKGROUND_COLOR = "#252F60"
 LATERAL_MENU_COLOR = "#353F6E"
 
 class AbaEquipamentos:
+    # definição do construtor da classe
     def __init__(self, areaPrincipal, abrir_manutencoes_callback=None):
-
+        # definição do frame principal da aba
         self.mainFrame = tk.Frame(areaPrincipal, bg=MAIN_BACKGROUND_COLOR)
         
         self.filtroFrame = tk.Frame(self.mainFrame, height=125, bg=MAIN_BACKGROUND_COLOR)
@@ -31,25 +32,25 @@ class AbaEquipamentos:
         self.abrir_manutencoes_callback = abrir_manutencoes_callback
 
     def criarFiltros(self):
-
+        #define o label e o combobox de status
         self.statusLabel = tk.Label(self.filtroFrame, text="Status:",  height=7, bg=MAIN_BACKGROUND_COLOR, fg="white")
         self.statusLabel.pack(side="left", padx=10, pady=10)
-
+        #define as opções do combobox de status, incluindo a opção 'Todos' no início
         self.statusComboBox = ttk.Combobox(self.filtroFrame, state= "readonly", values=["Todos", "Disponível", "Manutenção"])
         self.statusComboBox.current(0)
         self.statusComboBox.pack(side="left", padx=10, pady=10)
-
+        #define o label e o entry de pesquisa
         self.pesquisaLabel = tk.Label(self.filtroFrame, text="Pesquisar (id):", bg=MAIN_BACKGROUND_COLOR, fg="white")
         self.pesquisaLabel.pack(side="left", padx=10, pady=10)
 
         self.pesquisaEntry = tk.Entry(self.filtroFrame)
         self.pesquisaEntry.pack(side="left", padx=10, pady=10)
-        
+        #define o bind para o evento de pressionar Enter no entry de pesquisa
         self.pesquisaEntry.bind('<Return>', self.onAplicarFiltro)
 
         self.aplicarFiltroButton = tk.Button(self.filtroFrame, text="Aplicar Filtro", command=self.onAplicarFiltro)
         self.aplicarFiltroButton.pack(side="left", padx=10, pady=10)
-
+    # Aplica os filtros selecionados na tela de equipamentos
     def onAplicarFiltro(self, event=None):
         todosEquipamentos = self.equipamentosService.obterTodosEquipamentos()
         statusSelecionado = self.statusComboBox.get()

@@ -19,8 +19,8 @@ class mainApp:
         self.root.title("GEMA")
         self.root.state("zoomed")  # Janela maximizada
 
-        self.menuLateral = tk.Frame(self.root, width=350, bg=LATERAL_MENU_COLOR)  # Increased width from 250 to 350
-        self.menuLateral.pack(side="left", fill="y")
+        self.menuLateral = tk.Frame(self.root, width=350, bg=LATERAL_MENU_COLOR)  # Define a largura do menu lateral para 350 pixels
+        self.menuLateral.pack(side="left", fill="y") # Preenche verticalmente o menu lateral
 
         # Adiciona uma imagem no menu lateral
         self.logo_img = tk.PhotoImage(file=os.path.abspath("images/LogoGME.png"))
@@ -56,39 +56,39 @@ class mainApp:
         self.AbaNovaManutencao = AbaNovaManutencao(self.areaPrincipal, open_manutencoes_callback=self.abrirManutencoesComFiltro)
         self.AbaEditarManutecao = AbaEditarManutencao(self.areaPrincipal, open_manutencoes_callback=self.abrirManutencoesComFiltro)
         self.onOpenEquipamentos()
-
+    # função para abrir a aba de equipamentos
     def onOpenEquipamentos(self):
         if self.AbaEquipamentos.mainFrame.winfo_ismapped():
             return
         
-        self.AbaEquipamentos.mainFrame.pack(expand=True, fill="both", padx= 20)
-        self.AbaManutencoes.mainFrame.pack_forget()
+        self.AbaEquipamentos.mainFrame.pack(expand=True, fill="both", padx= 20) #
+        self.AbaManutencoes.mainFrame.pack_forget() #Esconde as outras abas
         self.AbaNovaManutencao.mainFrame.pack_forget()
         self.AbaEditarManutecao.mainFrame.pack_forget()
-
+    #função para abrir a aba de manutenções
     def onOpenManutencoes(self):
         if self.AbaManutencoes.mainFrame.winfo_ismapped():
             return
         
         self.AbaManutencoes.mainFrame.pack(expand=True, fill="both", padx= 20)
-        self.AbaEquipamentos.mainFrame.pack_forget()
+        self.AbaEquipamentos.mainFrame.pack_forget() #Esconde as outras abas
         self.AbaNovaManutencao.mainFrame.pack_forget()
         self.AbaEditarManutecao.mainFrame.pack_forget()
-
+    # função para abrir a aba de manutenções com filtro por id de equipamento
     def abrirManutencoesComFiltro(self, equip_id):
         self.AbaManutencoes.abrirComFiltroPorId(equip_id)
         self.onOpenManutencoes()
-
+    # função para abrir a aba de nova manutenção
     def onOpenNovaManutencao(self):
         if self.AbaNovaManutencao.mainFrame.winfo_ismapped():
             return
         
         self.AbaNovaManutencao.mainFrame.pack(expand=True, fill="both", padx= 50)
-        self.AbaNovaManutencao.resetOptions()
+        self.AbaNovaManutencao.resetOptions()#Reseta os campos da aba de nova manutenção
         self.AbaManutencoes.mainFrame.pack_forget()
         self.AbaEquipamentos.mainFrame.pack_forget()
         self.AbaEditarManutecao.mainFrame.pack_forget()
-
+    # função para abrir a aba de editar manutenção
     def onOpenEditarManutencao(self, manutecao_id):
         if self.AbaEditarManutecao.mainFrame.winfo_ismapped():
             return
@@ -98,7 +98,7 @@ class mainApp:
             return
 
         self.AbaEditarManutecao.mainFrame.pack(expand=True, fill="both", padx= 50)
-        self.AbaEditarManutecao.popularCampos(manutecao_id)
+        self.AbaEditarManutecao.popularCampos(manutecao_id) #Popula os campos com os dados da manutenção
         self.AbaNovaManutencao.mainFrame.pack_forget()
         self.AbaManutencoes.mainFrame.pack_forget()
         self.AbaEquipamentos.mainFrame.pack_forget()
