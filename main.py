@@ -23,7 +23,7 @@ class mainApp:
         self.menuLateral.pack(side="left", fill="y")
 
         # Adiciona uma imagem no menu lateral
-        self.logo_img = tk.PhotoImage(file=os.path.abspath("images/LogoGEMA.png"))
+        self.logo_img = tk.PhotoImage(file=os.path.abspath("images/LogoGME.png"))
         self.logo_label = tk.Label(self.menuLateral, image=self.logo_img, bg=LATERAL_MENU_COLOR)
         self.logo_label.grid(row=0, column=0, pady=(30, 10), padx=10, sticky="n")
 
