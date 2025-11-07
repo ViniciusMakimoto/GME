@@ -20,7 +20,7 @@ class AbaEditarManutencao:
         self.mainFrame.columnconfigure(2, weight=1)
         self.mainFrame.columnconfigure(3, weight=2)
 
-        self.label = tk.Label(self.mainFrame, text="Editar Nova Manutenção", font=("Arial", 20), bg="#252F60", fg="white")
+        self.label = tk.Label(self.mainFrame, text="Editar Manutenção", font=("Arial", 20), bg="#252F60", fg="white")
         self.label.grid(row=0, column=0, columnspan=4, pady=20, sticky="ew")
 
         self.initGUI() #Inicializa os componentes da GUI
